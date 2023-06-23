@@ -1,4 +1,14 @@
+using Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+// DBContext DB's configurations
+builder.Services.AddDbContext<ApplicationDbContext>(options => 
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationConnectionString")));
+builder.Services.AddDbContext<SecurityDbContext>(options => 
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SecurityConnectionString")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
