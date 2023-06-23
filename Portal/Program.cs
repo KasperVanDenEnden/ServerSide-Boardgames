@@ -1,4 +1,8 @@
+using Domain;
+using Domainservices.Interfaces.IServices;
+using Domainservices.Services;
 using Infrastructure.Contexts;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +13,27 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationConnectionString")));
 builder.Services.AddDbContext<SecurityDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("SecurityConnectionString")));
+
+// Add Identity services
+builder.Services.AddIdentity<UserIdentity, IdentityRole>()
+        .AddEntityFrameworkStores<SecurityDbContext>()
+        .AddSignInManager<SignInManager<UserIdentity>>()
+        .AddDefaultTokenProviders();
+
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+
+// Repositories AddScoped
+
+// Services AddScoped
+builder.Services.AddScoped<IAccountService, AccountService>();
+
+// Authenticated
+builder.Services.AddAuthentication("CookieAuth")
+    .AddCookie("CookieAuth", config =>
+    {
+        config.Cookie.Name = "AuthorizationCookieSSBG";
+        config.LoginPath = "/Account/Login";
+    });
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -28,6 +53,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

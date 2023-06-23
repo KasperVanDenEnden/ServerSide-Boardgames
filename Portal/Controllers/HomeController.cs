@@ -15,6 +15,17 @@ namespace Portal.Controllers
 
         public IActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                // User is logged in, display logged-in content
+                ViewBag.Message = "Welcome, " + User.Identity.Name + "!";
+            }
+            else
+            {
+                // User is not logged in, display default content
+                ViewBag.Message = "Welcome to the home page!";
+            }
+
             return View();
         }
 
