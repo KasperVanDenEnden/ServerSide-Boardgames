@@ -7,10 +7,10 @@ namespace Portal.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<UserIdentity> _userManager;
+        private readonly SignInManager<UserIdentity> _signInManager;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(UserManager<UserIdentity> userManager, SignInManager<UserIdentity> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -33,7 +33,7 @@ namespace Portal.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = model.Email, Email = model.Email };
+                var user = new UserIdentity { UserName = model.Username, Email = model.Email };
 
                 var result = await _userManager.CreateAsync(user);
 

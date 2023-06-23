@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Domain;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,9 +10,11 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Contexts
 {
-    public class SecurityDbContext : IdentityDbContext<IdentityUser>
+    public class SecurityDbContext : IdentityDbContext<UserIdentity>
     {
 
         public SecurityDbContext(DbContextOptions<SecurityDbContext> options) : base(options) { }
+
+      
     }
 }
