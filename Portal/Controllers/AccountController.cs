@@ -35,7 +35,7 @@ namespace Portal.Controllers
             {
                 var user = new UserIdentity { UserName = model.Username, Email = model.Email };
 
-                var result = await _userManager.CreateAsync(user);
+                var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
@@ -53,7 +53,7 @@ namespace Portal.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByNameAsync(model.UsernameOrEmail)
                             ?? await _userManager.FindByEmailAsync(model.UsernameOrEmail);
