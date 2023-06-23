@@ -1,0 +1,15 @@
+C:\SSBG\Domainservices\bin\Debug\net7.0\Domainservices.deps.json
+C:\SSBG\Domainservices\bin\Debug\net7.0\Domainservices.dll
+C:\SSBG\Domainservices\bin\Debug\net7.0\Domainservices.pdb
+C:\SSBG\Domainservices\bin\Debug\net7.0\Domain.dll
+C:\SSBG\Domainservices\bin\Debug\net7.0\Domain.pdb
+C:\SSBG\Domainservices\obj\Debug\net7.0\Domainservices.csproj.AssemblyReference.cache
+C:\SSBG\Domainservices\obj\Debug\net7.0\Domainservices.GeneratedMSBuildEditorConfig.editorconfig
+C:\SSBG\Domainservices\obj\Debug\net7.0\Domainservices.AssemblyInfoInputs.cache
+C:\SSBG\Domainservices\obj\Debug\net7.0\Domainservices.AssemblyInfo.cs
+C:\SSBG\Domainservices\obj\Debug\net7.0\Domainservices.csproj.CoreCompileInputs.cache
+C:\SSBG\Domainservices\obj\Debug\net7.0\Domainservices.csproj.CopyComplete
+C:\SSBG\Domainservices\obj\Debug\net7.0\Domainservices.dll
+C:\SSBG\Domainservices\obj\Debug\net7.0\refint\Domainservices.dll
+C:\SSBG\Domainservices\obj\Debug\net7.0\Domainservices.pdb
+C:\SSBG\Domainservices\obj\Debug\net7.0\ref\Domainservices.dll
