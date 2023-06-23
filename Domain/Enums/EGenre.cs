@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Enums
 {
-    internal class EGenre
+    public enum EGenre
     {
     }
 }
