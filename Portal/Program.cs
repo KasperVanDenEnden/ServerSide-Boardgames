@@ -1,4 +1,6 @@
+using Domain;
 using Infrastructure.Contexts;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +11,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ApplicationConnectionString")));
 builder.Services.AddDbContext<SecurityDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("SecurityConnectionString")));
+
+// Add Identity services
+builder.Services.AddIdentity<User, IdentityRole>()
+        .AddEntityFrameworkStores<ApplicationDbContext>()
+        .AddDefaultTokenProviders(); ;
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -28,6 +35,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

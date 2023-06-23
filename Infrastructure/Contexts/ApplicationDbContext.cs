@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,8 @@ namespace Infrastructure.Contexts
     public class ApplicationDbContext : DbContext
     {
         // Tables from domain Classes Example
-        // public DbSet<Boardgame> Boardgame { get; set; } = null!;
+        public DbSet<User> User { get; set; } = null!;
+
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
     }
