@@ -1,7 +1,9 @@
 using Domain;
+using Domainservices.Interfaces.IRepositories;
 using Domainservices.Interfaces.IServices;
 using Domainservices.Services;
 using Infrastructure.Contexts;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +25,9 @@ builder.Services.AddIdentity<UserIdentity, IdentityRole>()
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 // Repositories AddScoped
+builder.Services.AddScoped<IUserRepository, IUserRepository>();
+builder.Services.AddScoped<IGamenightRepository, GamenightRepository>();
+builder.Services.AddScoped<IBoardgameRepository, BoardgameRepository>();
 
 // Services AddScoped
 builder.Services.AddScoped<IAccountService, AccountService>();
