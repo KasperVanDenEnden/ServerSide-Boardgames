@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations.ApplicationDb
 {
     /// <inheritdoc />
-    public partial class FKBasicEntities : Migration
+    public partial class BasicEntitiesWithFK : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,21 +28,18 @@ namespace Infrastructure.Migrations.ApplicationDb
                 });
 
             migrationBuilder.CreateTable(
-                name: "Boardgame",
+                name: "User",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Genre = table.Column<int>(type: "int", nullable: false),
-                    IsPG18 = table.Column<bool>(type: "bit", nullable: false),
-                    Image = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    Gametype = table.Column<int>(type: "int", nullable: false)
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Boardgame", x => x.Id);
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,6 +70,30 @@ namespace Infrastructure.Migrations.ApplicationDb
                 });
 
             migrationBuilder.CreateTable(
+                name: "Boardgame",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Genre = table.Column<int>(type: "int", nullable: false),
+                    IsPG18 = table.Column<bool>(type: "bit", nullable: false),
+                    Image = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    Gametype = table.Column<int>(type: "int", nullable: false),
+                    GamenightId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Boardgame", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Boardgame_Gamenights_GamenightId",
+                        column: x => x.GamenightId,
+                        principalTable: "Gamenights",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Participating",
                 columns: table => new
                 {
@@ -95,6 +116,11 @@ namespace Infrastructure.Migrations.ApplicationDb
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Boardgame_GamenightId",
+                table: "Boardgame",
+                column: "GamenightId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Gamenights_AddressId",
@@ -126,6 +152,9 @@ namespace Infrastructure.Migrations.ApplicationDb
 
             migrationBuilder.DropTable(
                 name: "Address");
+
+            migrationBuilder.DropTable(
+                name: "User");
         }
     }
 }

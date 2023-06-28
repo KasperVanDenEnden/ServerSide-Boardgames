@@ -16,6 +16,10 @@ namespace Portal.Models
         public string Password { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
+        public DateOnly DateOfBirth { get; set; }
+
+        [Required]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }

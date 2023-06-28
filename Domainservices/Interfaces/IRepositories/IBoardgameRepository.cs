@@ -9,7 +9,7 @@ namespace Domainservices.Interfaces.IRepositories
 {
     public interface IBoardgameRepository
     {
-        public Task<Boardgame> AddBoardgameAsync(Boardgame boardgame);
+        public Task<bool> AddBoardgameAsync(Boardgame newBoardgame);
         public Task<List<Boardgame>> GetBoardgamesAsync();
         public Task<Boardgame> GetBoardgameAsync(int boardgameId);
         

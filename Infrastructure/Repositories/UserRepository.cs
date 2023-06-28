@@ -1,5 +1,6 @@
 ﻿using Domain;
 using Domainservices.Interfaces.IRepositories;
+using Infrastructure.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,27 @@ namespace Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        public Task<User> GetUserAsync(string username)
+        private readonly ApplicationDbContext _context;
+        public UserRepository(ApplicationDbContext context) {
+            _context = context;
+        }
+
+        public async Task<bool> AddUserAsync(User newUser)
         {
-            throw new NotImplementedException();
+            var user = await _context.User.AddAsync(newUser);
+            await _context.SaveChangesAsync();
+
+            if (user != null) { return true ; }
+            return false;
+
+        }
+
+        public async Task<User> GetUserAsync(string username)
+        {
+            var user = await _context.User.FindAsync(username);
+
+            if (user != null) { return user; }
+            return null;
         }
     }
 }

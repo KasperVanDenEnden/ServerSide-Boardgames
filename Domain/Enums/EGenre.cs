@@ -8,5 +8,18 @@ namespace Domain.Enums
 {
     public enum EGenre
     {
+        Strategy,
+        Party,
+        Cooperative,
+        DeckBuilding,
+        WorkerPlacement,
+        AreaControl,
+        RolePlaying,
+        Abstract,
+        TilePlacement,
+        CardGame,
+        Economic,
+        Deduction,
+        Adventure
     }
 }

@@ -1,5 +1,8 @@
 ﻿using Domain;
+using Domain.Many_To_Many;
 using Domainservices.Interfaces.IRepositories;
+using Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,24 +13,45 @@ namespace Infrastructure.Repositories
 {
     public class GamenightRepository : IGamenightRepository
     {
-        public Task<Gamenight> AddGamenightAsync(Gamenight newGamenight)
+
+        private readonly ApplicationDbContext _context;
+
+        public GamenightRepository(ApplicationDbContext context)
         {
+            _context = context;
+        }
+
+        public async Task<Gamenight> AddGamenightAsync(Gamenight newGamenight)
+        {
+            await _context.AddAsync(newGamenight);
+            _context.SaveChanges();
+
+            return null;
+            
+        }
+
+        public async Task<List<Gamenight>> GetGamenightsAsync()
+        {
+            var gamenights = _context.Gamenights.ToList();
+            if (gamenights.Any()) { return gamenights; }
+            return null; 
             throw new NotImplementedException();
         }
 
-        public Task<List<Gamenight>> GetGamenightsAsync()
+        public async Task<List<Gamenight>> GetGamenightsHostingAsync(string username)
         {
-            throw new NotImplementedException();
+            var hosted = await _context.Gamenights.Where(u => u.Host.UserName == username).ToListAsync();
+            return hosted;
         }
 
-        public Task<List<Gamenight>> GetGamenightsHostingAsync(string username)
+        public async Task<List<Participating>> GetGamenightsParticipatingAsync(string username)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Gamenight>> GetGamenightsParticipatingAsync(int userId)
-        {
-            throw new NotImplementedException();
+            var user = await _context.User.Include(u => u.ParticipatingGamenights).FirstOrDefaultAsync(u => u.UserName == username);
+            if (user != null)
+            {
+                return user.ParticipatingGamenights;
+            }
+            return null;
         }
 
         public Task<bool> RemoveGamenightAsync(int gamenightId)

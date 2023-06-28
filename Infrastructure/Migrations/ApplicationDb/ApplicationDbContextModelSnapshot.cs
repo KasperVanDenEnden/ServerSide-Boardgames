@@ -62,6 +62,9 @@ namespace Infrastructure.Migrations.ApplicationDb
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("GamenightId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Gametype")
                         .HasColumnType("int");
 
@@ -80,6 +83,8 @@ namespace Infrastructure.Migrations.ApplicationDb
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GamenightId");
 
                     b.ToTable("Boardgame");
                 });
@@ -133,15 +138,27 @@ namespace Infrastructure.Migrations.ApplicationDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("Domain.Boardgame", b =>
+                {
+                    b.HasOne("Domain.Gamenight", null)
+                        .WithMany("BoardgameList")
+                        .HasForeignKey("GamenightId");
                 });
 
             modelBuilder.Entity("Domain.Gamenight", b =>
@@ -184,6 +201,8 @@ namespace Infrastructure.Migrations.ApplicationDb
 
             modelBuilder.Entity("Domain.Gamenight", b =>
                 {
+                    b.Navigation("BoardgameList");
+
                     b.Navigation("Participants");
                 });
 

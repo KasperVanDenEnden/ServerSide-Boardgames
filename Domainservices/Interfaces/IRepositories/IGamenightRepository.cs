@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Many_To_Many;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace Domainservices.Interfaces.IRepositories
 
         // GETS: Overviews
         public Task<List<Gamenight>> GetGamenightsAsync();
-        public Task<List<Gamenight>> GetGamenightsParticipatingAsync(int userId);
+        public Task<List<Participating>> GetGamenightsParticipatingAsync(string username);
         public Task<List<Gamenight>> GetGamenightsHostingAsync(string username);
 
 

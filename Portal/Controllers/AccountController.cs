@@ -1,7 +1,11 @@
 ﻿using Domain;
+using Domainservices.Interfaces.IRepositories;
+using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Portal.Models;
+using System;
 
 namespace Portal.Controllers
 {
@@ -9,11 +13,13 @@ namespace Portal.Controllers
     {
         private readonly UserManager<UserIdentity> _userManager;
         private readonly SignInManager<UserIdentity> _signInManager;
+        private readonly IUserRepository _userRepository;
 
-        public AccountController(UserManager<UserIdentity> userManager, SignInManager<UserIdentity> signInManager)
+        public AccountController(UserManager<UserIdentity> userManager, SignInManager<UserIdentity> signInManager, IUserRepository userRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _userRepository = userRepository;
         }
 
         [HttpGet]
@@ -33,12 +39,16 @@ namespace Portal.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new UserIdentity { UserName = model.Username, Email = model.Email };
+                var userIdentity = new UserIdentity { UserName = model.Username, Email = model.Email };
 
-                var result = await _userManager.CreateAsync(user, model.Password);
+                var result = await _userManager.CreateAsync(userIdentity, model.Password);
 
                 if (result.Succeeded)
                 {
+                    DateTime dateTime = new DateTime(model.DateOfBirth.Year, model.DateOfBirth.Month, model.DateOfBirth.Day);
+                    var user = new User { UserName = model.Username, Email = model.Email, DateOfBirth = dateTime };
+                    await _userRepository.AddUserAsync(user);
+
                     return RedirectToAction("Login", "Account");
                 }
 
@@ -49,6 +59,7 @@ namespace Portal.Controllers
             }
             return View(model);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -71,5 +82,8 @@ namespace Portal.Controllers
             }
             return View(model);
         }
+
+     
+
     }
 }
