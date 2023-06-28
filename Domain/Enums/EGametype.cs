@@ -8,5 +8,20 @@ namespace Domain.Enums
 {
     public enum EGametype
     {
+        Fantasy,
+        SciFi,
+        Historical,
+        Horror,
+        Abstract,
+        Mystery,
+        Adventure,
+        War,
+        Educational,
+        Sports,
+        Trivia,
+        Party,
+        CardGame,
+        Strategy,
+        Cooperative
     }
 }

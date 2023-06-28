@@ -1,7 +1,9 @@
 using Domain;
+using Domainservices.Interfaces.IRepositories;
 using Domainservices.Interfaces.IServices;
 using Domainservices.Services;
 using Infrastructure.Contexts;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,9 +25,13 @@ builder.Services.AddIdentity<UserIdentity, IdentityRole>()
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 // Repositories AddScoped
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IGamenightRepository, GamenightRepository>();
+builder.Services.AddScoped<IBoardgameRepository, BoardgameRepository>();
 
 // Services AddScoped
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IBoardgameService, BoardgameService>();
 
 // Authenticated
 builder.Services.AddAuthentication("CookieAuth")
@@ -55,6 +61,11 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "Account",
+    pattern: "{controller=Account}/{action=Login}",
+    defaults: new { controller = "Account" });
 
 app.MapControllerRoute(
     name: "default",
