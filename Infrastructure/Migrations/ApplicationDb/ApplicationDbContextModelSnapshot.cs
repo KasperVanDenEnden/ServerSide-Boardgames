@@ -47,7 +47,7 @@ namespace Infrastructure.Migrations.ApplicationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Address");
+                    b.ToTable("Address", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Boardgame", b =>
@@ -61,9 +61,6 @@ namespace Infrastructure.Migrations.ApplicationDb
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("GamenightId")
-                        .HasColumnType("int");
 
                     b.Property<int>("Gametype")
                         .HasColumnType("int");
@@ -84,9 +81,7 @@ namespace Infrastructure.Migrations.ApplicationDb
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GamenightId");
-
-                    b.ToTable("Boardgame");
+                    b.ToTable("Boardgame", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Gamenight", b =>
@@ -103,8 +98,23 @@ namespace Infrastructure.Migrations.ApplicationDb
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("HostId")
                         .HasColumnType("int");
+
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<bool>("IsPG18")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -112,7 +122,22 @@ namespace Infrastructure.Migrations.ApplicationDb
 
                     b.HasIndex("HostId");
 
-                    b.ToTable("Gamenights");
+                    b.ToTable("Gamenights", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Many_To_Many.GamenightBoardgame", b =>
+                {
+                    b.Property<int>("GamenightId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BoardgameId")
+                        .HasColumnType("int");
+
+                    b.HasKey("GamenightId", "BoardgameId");
+
+                    b.HasIndex("BoardgameId");
+
+                    b.ToTable("GamenightBoardgames", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Many_To_Many.Participating", b =>
@@ -127,7 +152,7 @@ namespace Infrastructure.Migrations.ApplicationDb
 
                     b.HasIndex("GamenightId");
 
-                    b.ToTable("Participating");
+                    b.ToTable("Participating", (string)null);
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -151,14 +176,7 @@ namespace Infrastructure.Migrations.ApplicationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
-                });
-
-            modelBuilder.Entity("Domain.Boardgame", b =>
-                {
-                    b.HasOne("Domain.Gamenight", null)
-                        .WithMany("BoardgameList")
-                        .HasForeignKey("GamenightId");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Gamenight", b =>
@@ -180,6 +198,25 @@ namespace Infrastructure.Migrations.ApplicationDb
                     b.Navigation("Host");
                 });
 
+            modelBuilder.Entity("Domain.Many_To_Many.GamenightBoardgame", b =>
+                {
+                    b.HasOne("Domain.Boardgame", "Boardgame")
+                        .WithMany("GamenightBoardgames")
+                        .HasForeignKey("BoardgameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Gamenight", "Gamenight")
+                        .WithMany("Boardgames")
+                        .HasForeignKey("GamenightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Boardgame");
+
+                    b.Navigation("Gamenight");
+                });
+
             modelBuilder.Entity("Domain.Many_To_Many.Participating", b =>
                 {
                     b.HasOne("Domain.Gamenight", "Gamenight")
@@ -199,9 +236,14 @@ namespace Infrastructure.Migrations.ApplicationDb
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Boardgame", b =>
+                {
+                    b.Navigation("GamenightBoardgames");
+                });
+
             modelBuilder.Entity("Domain.Gamenight", b =>
                 {
-                    b.Navigation("BoardgameList");
+                    b.Navigation("Boardgames");
 
                     b.Navigation("Participants");
                 });

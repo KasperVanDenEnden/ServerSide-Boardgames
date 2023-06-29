@@ -11,7 +11,6 @@ namespace Domainservices.Interfaces.IRepositories
     {
         public Task<bool> AddBoardgameAsync(Boardgame newBoardgame);
         public Task<List<Boardgame>> GetBoardgamesAsync();
-        public Task<Boardgame> GetBoardgameAsync(int boardgameId);
-        
+        public Task<Boardgame> GetBoardgameByIdAsync(int boardgameId);
     }
 }

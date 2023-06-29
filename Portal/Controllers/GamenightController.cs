@@ -1,13 +1,23 @@
-﻿using Domainservices.Interfaces.IRepositories;
+﻿using Domain;
+using Domainservices.Interfaces.IRepositories;
+using Domainservices.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
+using Portal.Models;
 
 namespace Portal.Controllers
 {
     public class GamenightController : Controller
     {
         private readonly IGamenightRepository _gamenightRepository;
-        public GamenightController(IGamenightRepository gamenightRepository) {
+        private readonly IBoardgameRepository _boardgameRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IGamenightService _gamenightService;
+
+        public GamenightController(IGamenightRepository gamenightRepository, IBoardgameRepository boardgameRepository, IUserRepository userRepository, IGamenightService gamenightService) {
             _gamenightRepository = gamenightRepository;
+            _boardgameRepository = boardgameRepository;
+            _userRepository = userRepository;
+            _gamenightService = gamenightService;
         }
 
 
@@ -25,21 +35,43 @@ namespace Portal.Controllers
 
         public async Task<IActionResult> Participating()
         {
-            var participating = await _gamenightRepository.GetGamenightsParticipatingAsync(User.Identity.Name);
+            var userId = await _userRepository.GetUserIdAsync(User.Identity.Name);
+            var participating = await _gamenightRepository.GetGamenightsParticipatingAsync(userId);
             // You probably get List of Id numbers above, so we need to get the actual gamenights based on the Id's
             // First we have to implement participating tough!
             return View(participating);
         }
-
-        public IActionResult Organise()
+        public async Task<IActionResult> Organise()
         {
-            return View();
+            ViewBag.Boardgames = await _boardgameRepository.GetBoardgamesAsync();
+            var viewModel = new GamenightViewModel();
+            return View(viewModel);
         }
 
-        //[HttpPost]
-        //public Task<IActionResult> Organise(GamenightViewModel model)
-        //{
-        //    return
-        //}
+        [HttpPost]
+        public async Task<IActionResult> Organise(GamenightViewModel model)
+        {
+            var boardgamesList = await _boardgameRepository.GetBoardgamesAsync();
+            if (ModelState.IsValid)
+            {
+                var host = await _userRepository.GetUserAsync(User.Identity.Name);
+
+                if (host != null)
+                {
+                    var newGamenight = _gamenightService.CreateFromModel(model, host.Id, boardgamesList);
+                    // Process the submitted form data
+                    var gamenight = await _gamenightRepository.AddGamenightAsync(newGamenight);
+
+                    await _gamenightRepository.AddGamenightBoardgameAsync(gamenight.Id, model.SelectedBoardgameIds);
+
+                    // Redirect to a success page or perform other actions
+                    return RedirectToAction("Hosted","Gamenight");
+                }
+            }
+
+            ViewBag.Boardgames = boardgamesList;
+            return View(model);
+        }
+
     }
 }

@@ -18,8 +18,11 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title"> @night.DateTime</h5>
-                    
-                    </diV>
+                        <form method="POST" asp-action="Detail" asp-controller="Gamenight">
+                            <input type="hidden" name="gamenightId" value="@night.Id" />
+                            <button type="submit" class="btn btn-link">View Details</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         }

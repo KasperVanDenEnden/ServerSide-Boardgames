@@ -13,7 +13,6 @@ namespace Domain
     {
         public int Id { get; set; }
 
-
         [Required]
         public int HostId { get; set; }
         public User Host { get; set; }
@@ -27,8 +26,30 @@ namespace Domain
         public DateTime DateTime { get; set; }
 
         [Required]
-        public List<Boardgame> BoardgameList { get; set; }
+        public bool IsPG18 { get; set; }
+
+
+
+
+
+        // many-to-many
+        [Required]
+        public List<GamenightBoardgame> Boardgames { get; set; }
+
         // public List<Food> FoodList { get; set; }
+
+        // Extra attributes beyond requirements
+        [Required]
+        public string Name { get; set; }
+        [Required]
+        public string Description { get; set; }
+
+        // One of the chosen boardgames image
+        [Required]
+        public byte[] Image { get; set; }
+
+
+
 
 
     }

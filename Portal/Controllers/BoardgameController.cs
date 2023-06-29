@@ -31,26 +31,14 @@ namespace Portal.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (model.Image != null && model.Image.Length > 0)
+                var newBoardgame = await _boardgameService.CreateFromModel(model);
+                
+                var result = await _boardgameRepository.AddBoardgameAsync(newBoardgame);
+                if (result)
                 {
-                    var imageByteArray = await _boardgameService.ConfvertFileToByteArrayAsync(model.Image);
-
-                    var newBoardgame = new Boardgame
-                    {
-                        Name = model.Name,
-                        Description = model.Description,
-                        Image = imageByteArray,
-                        IsPG18 = model.IsPG18,
-                        Gametype = model.Gametype,
-                        Genre = model.Genre
-                    };
-
-                    var result = await _boardgameRepository.AddBoardgameAsync(newBoardgame);
-                    if (result)
-                    {
-                        return RedirectToAction("AddBoardgame");
-                    }
+                    return RedirectToAction("AddBoardgame");
                 }
+                
             }
             return View(model);
         }

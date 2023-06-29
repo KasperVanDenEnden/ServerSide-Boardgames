@@ -1,5 +1,6 @@
 ﻿using Domain;
 using Domainservices.Interfaces.IRepositories;
+using Domainservices.Interfaces.IServices;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,12 +15,14 @@ namespace Portal.Controllers
         private readonly UserManager<UserIdentity> _userManager;
         private readonly SignInManager<UserIdentity> _signInManager;
         private readonly IUserRepository _userRepository;
+        private readonly IAccountService _accountService;
 
-        public AccountController(UserManager<UserIdentity> userManager, SignInManager<UserIdentity> signInManager, IUserRepository userRepository)
+        public AccountController(UserManager<UserIdentity> userManager, SignInManager<UserIdentity> signInManager, IUserRepository userRepository, IAccountService accountService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _userRepository = userRepository;
+            _accountService = accountService;
         }
 
         [HttpGet]
@@ -39,15 +42,11 @@ namespace Portal.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userIdentity = new UserIdentity { UserName = model.Username, Email = model.Email };
-
-                var result = await _userManager.CreateAsync(userIdentity, model.Password);
+                var result = await _userManager.CreateAsync(_accountService.CreateUserIdentityFromModel(model), model.Password);
 
                 if (result.Succeeded)
                 {
-                    DateTime dateTime = new DateTime(model.DateOfBirth.Year, model.DateOfBirth.Month, model.DateOfBirth.Day);
-                    var user = new User { UserName = model.Username, Email = model.Email, DateOfBirth = dateTime };
-                    await _userRepository.AddUserAsync(user);
+                    await _userRepository.AddUserAsync(_accountService.CreateUserFromModel(model));
 
                     return RedirectToAction("Login", "Account");
                 }

@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Domain.Many_To_Many;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,5 +25,8 @@ namespace Domain
         public byte[] Image { get; set; }
         [Required]
         public EGametype Gametype { get; set; }
+
+        // many-to-many
+        public List<GamenightBoardgame> GamenightBoardgames { get; set; }
     }
 }

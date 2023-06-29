@@ -1,6 +1,7 @@
 ﻿using Domain;
 using Domainservices.Interfaces.IRepositories;
 using Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,10 +29,18 @@ namespace Infrastructure.Repositories
 
         public async Task<User> GetUserAsync(string username)
         {
-            var user = await _context.User.FindAsync(username);
+            var user = await _context.User.FirstOrDefaultAsync(u => u.UserName == username);
 
             if (user != null) { return user; }
             return null;
+        }
+
+        public async Task<int> GetUserIdAsync(string username)
+        {
+            var user = await _context.User.FirstOrDefaultAsync(u => u.UserName == username);
+
+            if (user != null) { return user.Id; }
+            return 0;
         }
     }
 }
