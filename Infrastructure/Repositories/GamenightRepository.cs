@@ -23,35 +23,70 @@ namespace Infrastructure.Repositories
 
         public async Task<Gamenight> AddGamenightAsync(Gamenight newGamenight)
         {
-            await _context.AddAsync(newGamenight);
-            _context.SaveChanges();
+            var gamenightEntry = await _context.AddAsync(newGamenight);
+            await _context.SaveChangesAsync();
+
+            if (gamenightEntry.Entity != null)
+            {
+                return gamenightEntry.Entity;
+            }
 
             return null;
-            
+        }
+
+        public async Task AddGamenightBoardgameAsync(int gamenightId, List<int> boardgameIds)
+        {
+            foreach (int boardgameId in boardgameIds)
+            {
+                var gamenightBoardgame = new GamenightBoardgame
+                {
+                    GamenightId = gamenightId,
+                    BoardgameId = boardgameId
+                };
+
+                await _context.GamenightBoardgames.AddAsync(gamenightBoardgame);
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<List<Gamenight>> GetGamenightsAsync()
         {
-            var gamenights = _context.Gamenights.ToList();
+            var gamenights = _context.Gamenights
+                .OrderBy(u => u.DateTime)
+                .ToList();
+
             if (gamenights.Any()) { return gamenights; }
-            return null; 
+            return null;
             throw new NotImplementedException();
         }
 
         public async Task<List<Gamenight>> GetGamenightsHostingAsync(string username)
         {
-            var hosted = await _context.Gamenights.Where(u => u.Host.UserName == username).ToListAsync();
+            var hosted = await _context.Gamenights
+                .Where(u => u.Host.UserName == username)
+                .OrderBy(u => u.DateTime)
+                .ToListAsync();
+
             return hosted;
         }
 
-        public async Task<List<Participating>> GetGamenightsParticipatingAsync(string username)
+        public async Task<List<Gamenight>> GetGamenightsParticipatingAsync(int userId)
         {
-            var user = await _context.User.Include(u => u.ParticipatingGamenights).FirstOrDefaultAsync(u => u.UserName == username);
-            if (user != null)
+            var participatingList = await _context.Participating.Where(u => u.UserId == userId).ToListAsync();
+
+            if (participatingList != null && participatingList.Count > 0)
             {
-                return user.ParticipatingGamenights;
+                var gamenightIds = participatingList.Select(p => p.GamenightId).ToList();
+
+                var participatingGamenights = await _context.Gamenights
+                    .Where(g => gamenightIds.Contains(g.Id))
+                    .ToListAsync();
+
+                return participatingGamenights;
             }
-            return null;
+
+            return new List<Gamenight>();
         }
 
         public Task<bool> RemoveGamenightAsync(int gamenightId)

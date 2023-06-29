@@ -15,6 +15,8 @@ namespace Infrastructure.Contexts
         public DbSet<User> User { get; set; } = null!;
         public DbSet<Gamenight> Gamenights { get; set; } = null!;
         public DbSet<Boardgame> Boardgame { get; set; } = null!;
+        public DbSet<GamenightBoardgame> GamenightBoardgames { get; set; } 
+        public DbSet<Participating> Participating { get; set; }
 
 
 
@@ -23,6 +25,10 @@ namespace Infrastructure.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+
+            modelBuilder.Entity<GamenightBoardgame>()
+            .HasKey(gb => new { gb.GamenightId, gb.BoardgameId });
 
             modelBuilder.Entity<Participating>()
             .HasKey(p => new { p.UserId, p.GamenightId });

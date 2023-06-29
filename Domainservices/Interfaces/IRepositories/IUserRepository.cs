@@ -11,5 +11,7 @@ namespace Domainservices.Interfaces.IRepositories
     {
         public Task<bool> AddUserAsync(User newUser);
         public Task<User> GetUserAsync(string username);
+
+        public Task<int> GetUserIdAsync(string username);
     }
 }

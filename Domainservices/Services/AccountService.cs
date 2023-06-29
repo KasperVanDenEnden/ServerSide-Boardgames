@@ -22,17 +22,16 @@ namespace Domainservices.Services
             _userManager = userManager;
             _signInManager = signInManager;
         }
-
-
-        public Task<bool> LoginAsync(string usernameOrEmail, string password)
+        public UserIdentity CreateUserIdentityFromModel(dynamic model)
         {
-
-            throw new NotImplementedException();
+            return new UserIdentity { UserName = model.Username, Email = model.Email };
         }
 
-        public Task<bool> RegisterAsync(string username, string email, string password)
+        public User CreateUserFromModel(dynamic model)
         {
-            throw new NotImplementedException();
+            DateTime dateTime = new(model.DateOfBirth.Year, model.DateOfBirth.Month, model.DateOfBirth.Day);
+            return new User { UserName = model.Username, Email = model.Email, DateOfBirth = dateTime };
         }
+
     }
 }

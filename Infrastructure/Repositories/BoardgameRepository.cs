@@ -41,7 +41,7 @@ namespace Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<Boardgame> GetBoardgameAsync(int boardgameId)
+        public async Task<Boardgame> GetBoardgameByIdAsync(int boardgameId)
         {
             var boardgame = await _context.Boardgame.FindAsync(boardgameId);
 

@@ -32,6 +32,7 @@ builder.Services.AddScoped<IBoardgameRepository, BoardgameRepository>();
 // Services AddScoped
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IBoardgameService, BoardgameService>();
+builder.Services.AddScoped<IGamenightService, GamenightService>();
 
 // Authenticated
 builder.Services.AddAuthentication("CookieAuth")
