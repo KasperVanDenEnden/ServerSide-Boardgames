@@ -1,0 +1,74 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@using Domain
+@model Gamenight
+
+
+@if (User.Identity.Name == Model.Host.UserName)
+{
+    // Delete button
+    <form method="post" action="/YourController/Delete">
+        <input type="hidden" name="gamenightId" value="@Model.Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+}
+else
+{
+    if (Model.Participants.Any(p => p.User.UserName == User.Identity.Name))
+    {
+        // Unparticipate button
+        <form method="post" action="/YourController/Unparticipate">
+            <input type="hidden" name="gamenightId" value="@Model.Id" />
+            <button type="submit" class="btn btn-warning">Unparticipate</button>
+        </form>
+    }
+    else
+    {
+        // Participate button
+        <form method="post" action="/YourController/Participate">
+            <input type="hidden" name="gamenightId" value="@Model.Id" />
+            <button type="submit" class="btn btn-success">Participate</button>
+        </form>
+    }
+}
+
+
+<div>
+    <h2>@Model.Name</h2>
+    <p>@Model.Description</p>
+    <p>Date and Time: @Model.DateTime</p>
+    <p>Is PG18: @Model.IsPG18</p>
+
+    <h3>Host</h3>
+    <p>@Model.Host.UserName</p>
+    <p>@Model.Host.Email</p>
+
+
+    <h3>Address</h3>
+    <p>@Model.Address.Street</p>
+    <p>@Model.Address.Housenumber</p>
+    <p>@Model.Address.Postal</p>
+    <p>@Model.Address.City</p>
+
+    <h3>Participants</h3>
+    <ul>
+        @foreach (var participant in Model.Participants)
+        {
+            <li>@participant.User</li>
+        }
+    </ul>
+
+    <h3>Boardgames</h3>
+    <ul>
+        @foreach (var boardgame in Model.Boardgames)
+        {
+            <li>@boardgame.Boardgame.Name</li>
+        }
+    </ul>
+
+    <h3>Image</h3>
+    <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Image)" alt="Gamenight Image" />
+</div>

@@ -68,6 +68,13 @@ namespace Domainservices.Services
             return gamenight;
         }
 
-
+        public bool DeleteAllowed(Gamenight gamenight)
+        {
+            if (gamenight.Participants.Count == 0)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
