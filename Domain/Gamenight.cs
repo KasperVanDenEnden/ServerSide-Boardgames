@@ -28,10 +28,6 @@ namespace Domain
         [Required]
         public bool IsPG18 { get; set; }
 
-
-
-
-
         // many-to-many
         [Required]
         public List<GamenightBoardgame> Boardgames { get; set; }
@@ -47,10 +43,5 @@ namespace Domain
         // One of the chosen boardgames image
         [Required]
         public byte[] Image { get; set; }
-
-
-
-
-
     }
 }

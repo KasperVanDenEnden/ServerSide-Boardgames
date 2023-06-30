@@ -73,5 +73,39 @@ namespace Portal.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Detail([FromForm] int gamenightId)
+        {
+            var gamenight = await _gamenightRepository.GetGamenightAsync(gamenightId);
+            return View(gamenight);
+        }
+
+        // Detail page button actions
+        [HttpPost]
+        public async Task<IActionResult> Delete([FromForm] int gamenightId)
+        {
+            var gamenight = await _gamenightRepository.GetGamenightAsync(gamenightId);
+            if (_gamenightService.DeleteAllowed(gamenight))
+            {
+
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Participate([FromForm] int gamenightId)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UnParticipate([FromForm] int gamenightId)
+        {
+            return View();
+        }
+
+
+
     }
 }

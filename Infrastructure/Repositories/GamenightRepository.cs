@@ -50,6 +50,20 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<Gamenight> GetGamenightAsync(int gamenightId)
+        {
+            var gamenight = await _context.Gamenights
+                .Include(gn => gn.Participants)
+                .ThenInclude(p => p.User)
+                .Include(gn => gn.Host)
+                .Include(gn => gn.Address)
+                .Include(gn => gn.Boardgames)
+                .ThenInclude(bg => bg.Boardgame)
+                .FirstOrDefaultAsync(gn => gn.Id == gamenightId);
+
+            return gamenight;
+        }
+
         public async Task<List<Gamenight>> GetGamenightsAsync()
         {
             var gamenights = _context.Gamenights

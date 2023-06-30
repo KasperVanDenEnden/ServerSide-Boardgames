@@ -13,5 +13,6 @@ namespace Domainservices.Interfaces.IServices
         public Address CreateAddressFromModel(dynamic model);
         public Gamenight CheckOnPG18Boardgames(Gamenight gamenight, List<int> selectedBoardgames, List<Boardgame> boargameList);
         public byte[] SetImage(List<int> selectedBoardgameIds, List<Boardgame> boardgameList);
+        public bool DeleteAllowed(Gamenight gamenight);
     }
 }
