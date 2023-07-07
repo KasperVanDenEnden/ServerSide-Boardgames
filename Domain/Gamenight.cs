@@ -21,6 +21,10 @@ namespace Domain
         public int AddressId { get; set; }
         public Address Address { get; set; }
 
+
+        [Required]
+        public int MaxParticipants { get; set; }
+
         public List<Participating> Participants { get; set; }
         [Required]
         public DateTime DateTime { get; set; }
