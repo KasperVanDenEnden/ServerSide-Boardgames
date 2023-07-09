@@ -103,14 +103,31 @@ namespace Infrastructure.Repositories
             return new List<Gamenight>();
         }
 
-        public Task<bool> RemoveGamenightAsync(int gamenightId)
+        public async Task<bool> RemoveGamenightAsync(int gamenightId)
         {
-            throw new NotImplementedException();
+            var gamenight = await _context.Gamenights.FindAsync(gamenightId);
+
+            if (gamenight == null)
+                return false; // Gamenight with specified ID not found
+
+            _context.Gamenights.Remove(gamenight);
+            await _context.SaveChangesAsync();
+
+            return true; // Gamenight deleted successfully
         }
 
-        public Task<bool> UpdateGamenightAsync(Gamenight gamenight)
+
+        public async Task<bool> UpdateGamenightAsync(Gamenight gamenight)
         {
-            throw new NotImplementedException();
+            var existingGamenight = await _context.Gamenights.FindAsync(gamenight.Id);
+
+            if (existingGamenight == null)
+                return false; // Gamenight with specified ID not found
+
+            _context.Entry(existingGamenight).CurrentValues.SetValues(gamenight);
+            await _context.SaveChangesAsync();
+
+            return true; // Gamenight updated successfully
         }
     }
 }

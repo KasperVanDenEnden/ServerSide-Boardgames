@@ -5,6 +5,9 @@ namespace Portal.Models
 {
     public class GamenightViewModel
     {
+
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Title is required.")]
         public string Title { get; set; }
 
@@ -26,6 +29,10 @@ namespace Portal.Models
 
         [Required]
         public bool IsPG18 { get; set; }
+
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Max Participants must be greater than 0.")]
+        public int MaxParticipants { get; set; }
 
         // Address
         [Required(ErrorMessage = "Street is required.")]

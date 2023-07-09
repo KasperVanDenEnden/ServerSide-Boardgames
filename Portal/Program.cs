@@ -28,11 +28,13 @@ builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IGamenightRepository, GamenightRepository>();
 builder.Services.AddScoped<IBoardgameRepository, BoardgameRepository>();
+builder.Services.AddScoped<IParticipatingRepository, ParticipatingRepository>();
 
 // Services AddScoped
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IBoardgameService, BoardgameService>();
 builder.Services.AddScoped<IGamenightService, GamenightService>();
+builder.Services.AddScoped<IParticipatingService, ParticipatingService>();
 
 // Authenticated
 builder.Services.AddAuthentication("CookieAuth")
@@ -67,6 +69,11 @@ app.MapControllerRoute(
     name: "Account",
     pattern: "{controller=Account}/{action=Login}",
     defaults: new { controller = "Account" });
+
+app.MapControllerRoute(
+    name: "Detail",
+    pattern: "Gamenight/Detai/{gamenightId}",
+    defaults: new { controller = "Gamenight", action = "Detail" });
 
 app.MapControllerRoute(
     name: "default",

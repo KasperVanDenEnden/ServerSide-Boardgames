@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Many_To_Many;
 using Domainservices.Interfaces.IServices;
 using System;
 using System.Collections.Generic;
@@ -18,16 +19,35 @@ namespace Domainservices.Services
 
             var gamenight = new Gamenight()
             {
+
                 Name = model.Title,
                 Description = model.Description,
                 DateTime = model.Date + model.Time,
                 IsPG18 = model.IsPG18,
+                MaxParticipants = model.MaxParticipants,
                 Address = address,
                 HostId = hostId,
                 Image = SetImage(model.SelectedBoardgameIds, boardgameList),
             };
 
             return CheckOnPG18Boardgames(gamenight, model.SelectedBoardgameIds, boardgameList);
+        }
+
+        public Gamenight CreateUpdatedGamenightFromModel(dynamic updatedModel,Gamenight gamenight, List<Boardgame> boardgameList)
+        {
+
+            gamenight.Name = updatedModel.Title;
+            gamenight.Description = updatedModel.Description;
+            gamenight.DateTime = updatedModel.Date + updatedModel.Time;
+            gamenight.IsPG18 = updatedModel.IsPG18;
+            gamenight.MaxParticipants = updatedModel.MaxParticipants;
+            gamenight.Address.Street = updatedModel.Street;
+            gamenight.Address.Housenumber = updatedModel.Housenumber;
+            gamenight.Address.Postal = updatedModel.Postal;
+            gamenight.Address.City = updatedModel.City;
+            gamenight.Image = SetImage(updatedModel.SelectedBoardgameIds, boardgameList);
+
+            return CheckOnPG18Boardgames(gamenight, updatedModel.SelectedBoardgameIds, boardgameList); ;
         }
 
         public byte[] SetImage(List<int> selectedBoardgameIds, List<Boardgame> boardgameList)
@@ -68,7 +88,7 @@ namespace Domainservices.Services
             return gamenight;
         }
 
-        public bool DeleteAllowed(Gamenight gamenight)
+        public bool EditOrDeleteAllowed(Gamenight gamenight)
         {
             if (gamenight.Participants.Count == 0)
             {
@@ -76,5 +96,34 @@ namespace Domainservices.Services
             }
             return false;
         }
+
+        public Participating CreateNewParticipatingClass(int gamenightId, int userId)
+        {
+            return new Participating { GamenightId = gamenightId, UserId = userId };
+        }
+
+        public Task<object> GamenightToViewModel(Gamenight gamenight)
+        {
+                object viewModel = new
+                {
+                    Id = gamenight.Id,
+                    Title = gamenight.Name,
+                    Description = gamenight.Description,
+                    Date = new DateOnly(gamenight.DateTime.Year,gamenight.DateTime.Month,gamenight.DateTime.Day),
+                    Time = new TimeOnly(gamenight.DateTime.Hour, gamenight.DateTime.Minute),
+                    IsPG18 = gamenight.IsPG18,
+                    MaxParticipants = gamenight.MaxParticipants,
+                    Street = gamenight.Address.Street,
+                    Housenumber = gamenight.Address.Housenumber,
+                    City = gamenight.Address.City,
+                    Postal = gamenight.Address.Postal,
+                    SelectedBoardgameIds = gamenight.Boardgames?.Select(p => p.BoardgameId).ToList() ?? new List<int>()
+                };
+
+                return Task.FromResult(viewModel);
+
+        }
+
+      
     }
 }
