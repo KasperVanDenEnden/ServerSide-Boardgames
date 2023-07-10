@@ -126,7 +126,14 @@ namespace Portal.Controllers
         public async Task<IActionResult> Detail(int gamenightId)
         {
             var gamenight = await _gamenightRepository.GetGamenightAsync(gamenightId);
-            return View(gamenight);
+
+            var viewModel = new GamenightDetailViewModel
+            {
+                Gamenight = gamenight,
+                Review = new ReviewViewModel()
+            };
+
+            return View(viewModel);
         }
 
 

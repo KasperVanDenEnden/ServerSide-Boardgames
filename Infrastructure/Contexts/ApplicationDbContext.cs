@@ -17,6 +17,8 @@ namespace Infrastructure.Contexts
         public DbSet<Boardgame> Boardgame { get; set; } = null!;
         public DbSet<GamenightBoardgame> GamenightBoardgames { get; set; } 
         public DbSet<Participating> Participating { get; set; }
+        public DbSet<Review> Review { get; set; }
+
 
 
 

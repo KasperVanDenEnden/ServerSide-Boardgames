@@ -37,6 +37,7 @@ namespace Domain
         public List<GamenightBoardgame> Boardgames { get; set; }
 
         // public List<Food> FoodList { get; set; }
+        public List<Review> Reviews { get; set; }
 
         // Extra attributes beyond requirements
         [Required]
