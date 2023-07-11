@@ -23,17 +23,17 @@ namespace Infrastructure.Repositories
         public async Task<bool> Participate(Participating participating)
         {
 
-            await _context.Participating.AddAsync(participating);
-
+            await _context.Participatings.AddAsync(participating);
+            await _context.SaveChangesAsync();
             return true;
         }
 
         public async Task<bool> UnParticipate(int gamenightId, int userId)
         {
-            var participating = await _context.Participating.FindAsync(gamenightId, userId);
+            var participating = await _context.Participatings.FindAsync(gamenightId, userId);
 
             if (participating != null) {
-                _context.Participating.Remove(participating);
+                _context.Participatings.Remove(participating);
                 await _context.SaveChangesAsync();
 
                 return true;

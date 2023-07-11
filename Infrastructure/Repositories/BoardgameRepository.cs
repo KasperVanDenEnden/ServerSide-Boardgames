@@ -23,7 +23,7 @@ namespace Infrastructure.Repositories
         {
             try
             {
-                var boardgame = await _context.Boardgame.AddAsync(newBoardgame);
+                var boardgame = await _context.Boardgames.AddAsync(newBoardgame);
                 await _context.SaveChangesAsync();
                 if (boardgame != null)
                 {
@@ -43,7 +43,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Boardgame> GetBoardgameByIdAsync(int boardgameId)
         {
-            var boardgame = await _context.Boardgame.FindAsync(boardgameId);
+            var boardgame = await _context.Boardgames.FindAsync(boardgameId);
 
             if (boardgame != null)
             {
@@ -54,7 +54,7 @@ namespace Infrastructure.Repositories
 
         public async Task<List<Boardgame>> GetBoardgamesAsync()
         {
-            var boardgames = await _context.Boardgame.ToListAsync();
+            var boardgames = await _context.Boardgames.ToListAsync();
             if (boardgames != null) return boardgames;
             return new List<Boardgame>();
         }

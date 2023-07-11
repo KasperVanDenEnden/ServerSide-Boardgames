@@ -22,6 +22,7 @@ namespace Domainservices.Interfaces.IRepositories
         public Task<List<Gamenight>> GetGamenightsParticipatingAsync(int userId);
         public Task<List<Gamenight>> GetGamenightsHostingAsync(string username);
         public Task AddGamenightBoardgameAsync(int gamenightId, List<int> boardgameIds);
-      
+        public Task<List<int>> GetHostGamenightIds(int hostId);
+
     }
 }

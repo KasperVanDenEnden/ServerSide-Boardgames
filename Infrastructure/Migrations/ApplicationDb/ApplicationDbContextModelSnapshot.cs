@@ -81,7 +81,7 @@ namespace Infrastructure.Migrations.ApplicationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("Boardgame");
+                    b.ToTable("Boardgames");
                 });
 
             modelBuilder.Entity("Domain.Gamenight", b =>
@@ -155,7 +155,44 @@ namespace Infrastructure.Migrations.ApplicationDb
 
                     b.HasIndex("GamenightId");
 
-                    b.ToTable("Participating");
+                    b.ToTable("Participatings");
+                });
+
+            modelBuilder.Entity("Domain.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GamenightId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Posted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GamenightId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -179,7 +216,7 @@ namespace Infrastructure.Migrations.ApplicationDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Domain.Gamenight", b =>
@@ -239,6 +276,25 @@ namespace Infrastructure.Migrations.ApplicationDb
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Review", b =>
+                {
+                    b.HasOne("Domain.Gamenight", "Gamenight")
+                        .WithMany("Reviews")
+                        .HasForeignKey("GamenightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Gamenight");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Domain.Boardgame", b =>
                 {
                     b.Navigation("GamenightBoardgames");
@@ -249,6 +305,8 @@ namespace Infrastructure.Migrations.ApplicationDb
                     b.Navigation("Boardgames");
 
                     b.Navigation("Participants");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
