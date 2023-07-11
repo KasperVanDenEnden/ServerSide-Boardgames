@@ -57,8 +57,9 @@ namespace Infrastructure.Repositories
                 .ThenInclude(p => p.User)
                 .Include(gn => gn.Host)
                 .Include(gn => gn.Address)
+                .Include(gn => gn.Reviews)
                 .Include(gn => gn.Boardgames)
-                .ThenInclude(bg => bg.Boardgame)
+                    .ThenInclude(bg => bg.Boardgame)
                 .FirstOrDefaultAsync(gn => gn.Id == gamenightId);
 
             return gamenight;
@@ -72,7 +73,6 @@ namespace Infrastructure.Repositories
 
             if (gamenights.Any()) { return gamenights; }
             return null;
-            throw new NotImplementedException();
         }
 
         public async Task<List<Gamenight>> GetGamenightsHostingAsync(string username)
@@ -87,7 +87,7 @@ namespace Infrastructure.Repositories
 
         public async Task<List<Gamenight>> GetGamenightsParticipatingAsync(int userId)
         {
-            var participatingList = await _context.Participating.Where(u => u.UserId == userId).ToListAsync();
+            var participatingList = await _context.Participatings.Where(u => u.UserId == userId).ToListAsync();
 
             if (participatingList != null && participatingList.Count > 0)
             {
@@ -102,6 +102,8 @@ namespace Infrastructure.Repositories
 
             return new List<Gamenight>();
         }
+
+        
 
         public async Task<bool> RemoveGamenightAsync(int gamenightId)
         {
@@ -129,5 +131,17 @@ namespace Infrastructure.Repositories
 
             return true; // Gamenight updated successfully
         }
+
+
+        public async Task<List<int>> GetHostGamenightIds(int hostId)
+        {
+            List<int> gamenightIds = await _context.Gamenights
+                .Where(gn => gn.Host.Id == hostId)
+                .Select(gn => gn.Id)
+                .ToListAsync();
+
+            return gamenightIds;
+        }
+
     }
 }

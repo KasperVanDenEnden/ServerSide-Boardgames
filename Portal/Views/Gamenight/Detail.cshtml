@@ -1,8 +1,7 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    var HostCalculations = ViewBag.ReviewCalculations as Dictionary<string, object>;
 }
+
 @using Domain
 @model GamenightDetailViewModel
 
@@ -40,7 +39,6 @@ else
     }
 }
 
-
 <div>
     <h2>@Model.Gamenight.Name</h2>
     <p>@Model.Gamenight.Description</p>
@@ -50,7 +48,8 @@ else
     <h3>Host</h3>
     <p>@Model.Gamenight.Host.UserName</p>
     <p>@Model.Gamenight.Host.Email</p>
-
+    <p>Total Reviews: @HostCalculations["total"]</p>
+    <p>Average Reviews Score: @HostCalculations["averageRating"] / 5</p>
 
     <h3>Address</h3>
     <p>@Model.Gamenight.Address.Street</p>
@@ -79,33 +78,67 @@ else
 </div>
 
 
+@if (User.Identity.Name != Model.Gamenight.Host.UserName)
+{
+
+    <div>
+        <form asp-action="Detail" asp-controller="Gamenight" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <h3>Leave a Review</h3>
+
+            <input type="hidden" name="GamenightId" value="@Model.Review.GamenightId" />
+
+            <div class="form-group">
+                <label asp-for="Review.Comment">Comment</label>
+                <input name="Comment" class="form-control" value="@Model.Review.Comment" />
+                <span asp-validation-for="Review.Comment" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Review.Rating">Rating</label>
+                <select name="Rating" id="Rating" class="form-control">
+                    <option value="">-- Select Rating --</option>
+                    <option value="1" selected="@(Model.Review.Rating == 1)">1</option>
+                    <option value="2" selected="@(Model.Review.Rating == 2)">2</option>
+                    <option value="3" selected="@(Model.Review.Rating == 3)">3</option>
+                    <option value="4" selected="@(Model.Review.Rating == 4)">4</option>
+                    <option value="5" selected="@(Model.Review.Rating == 5)">5</option>
+                </select>
+
+                <span asp-validation-for="Review.Rating" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Leave Review</button>
+        </form>
+    </div>
+}
+
+
+@{
+    double averageRating = 0;
+    if (Model.Gamenight.Reviews.Count > 0)
+    {
+        int totalRating = 0;
+        foreach (var review in Model.Gamenight.Reviews)
+        {
+            totalRating += review.Rating;
+        }
+        averageRating = (double)totalRating / Model.Gamenight.Reviews.Count;
+    }
+}
 
 <div>
-    <!-- Other content of your detail page -->
-
-   
-        <div>
-            <h3>Leave a Review</h3>
-            <div>
-            @Html.LabelFor(m => m.Review.Comment)
-                @Html.TextAreaFor(m => m.Review.Comment, new { rows = 4, cols = 40 })
-            @Html.ValidationMessageFor(m => m.Review.Comment)
-            </div>
-
-            <div>
-            @Html.LabelFor(m => m.Review.Rating)
-            @Html.DropDownListFor(m => m.Review.Rating, new SelectList(new[]
-                {
-                new SelectListItem { Text = "1", Value = "1" },
-                new SelectListItem { Text = "2", Value = "2" },
-                new SelectListItem { Text = "3", Value = "3" },
-                new SelectListItem { Text = "4", Value = "4" },
-                new SelectListItem { Text = "5", Value = "5" }
-                }, "Value", "Text"), "Select a rating")
-                @Html.ValidationMessageFor(m => m.Review.Rating)
-            </div>
-
-            <input type="submit" value="Submit Review" />
+    <h3>Reviews</h3>
+    <p>Total Reviews: @Model.Gamenight.Reviews.Count</p>
+    <p>Score: @averageRating / 5 </p>
+    @foreach (var review in Model.Gamenight.Reviews)
+    {
+        <div class="col-2">
+            <h4>@review.Username</h4>
+            <h5>@review.Posted</h5>
+            <p>Score: @review.Rating</p>
+            <p>@review.Comment</p>
         </div>
-    </div>
 
+    }
+</div>

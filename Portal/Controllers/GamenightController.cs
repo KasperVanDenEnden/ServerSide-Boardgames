@@ -3,6 +3,9 @@ using Domainservices.Interfaces.IRepositories;
 using Domainservices.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Portal.Models;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata.Ecma335;
+using System.Text.Json;
 
 namespace Portal.Controllers
 {
@@ -12,16 +15,30 @@ namespace Portal.Controllers
         private readonly IBoardgameRepository _boardgameRepository;
         private readonly IParticipatingRepository _participatingRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IReviewRepository _reviewRepository;
+
         private readonly IGamenightService _gamenightService;
         private readonly IParticipatingService _participatingService;
+        private readonly IReviewService _reviewService;
 
-        public GamenightController(IGamenightRepository gamenightRepository, IBoardgameRepository boardgameRepository, IParticipatingRepository participatingRepository, IUserRepository userRepository, IGamenightService gamenightService, IParticipatingService participatingService) {
+        public GamenightController(
+            IGamenightRepository gamenightRepository,
+            IBoardgameRepository boardgameRepository,
+            IParticipatingRepository participatingRepository,
+            IUserRepository userRepository,
+            IReviewRepository reviewRepository,
+            IGamenightService gamenightService,
+            IParticipatingService participatingService,
+            IReviewService reviewService)
+        {
             _gamenightRepository = gamenightRepository;
             _boardgameRepository = boardgameRepository;
             _participatingRepository = participatingRepository;
             _userRepository = userRepository;
+            _reviewRepository = reviewRepository;
             _gamenightService = gamenightService;
             _participatingService = participatingService;
+            _reviewService = reviewService;
         }
 
 
@@ -41,8 +58,6 @@ namespace Portal.Controllers
         {
             var userId = await _userRepository.GetUserIdAsync(User.Identity.Name);
             var participating = await _gamenightRepository.GetGamenightsParticipatingAsync(userId);
-            // You probably get List of Id numbers above, so we need to get the actual gamenights based on the Id's
-            // First we have to implement participating tough!
             return View(participating);
         }
         public async Task<IActionResult> Organise()
@@ -59,20 +74,16 @@ namespace Portal.Controllers
             if (ModelState.IsValid)
             {
                 var host = await _userRepository.GetUserAsync(User.Identity.Name);
-
                 if (host != null)
                 {
                     var newGamenight = _gamenightService.CreateFromModel(model, host.Id, boardgameList);
                     // Process the submitted form data
                     var gamenight = await _gamenightRepository.AddGamenightAsync(newGamenight);
-
                     await _gamenightRepository.AddGamenightBoardgameAsync(gamenight.Id, model.SelectedBoardgameIds);
-
                     // Redirect to a success page or perform other actions
-                    return RedirectToAction("Hosted","Gamenight");
+                    return RedirectToAction("Hosted", "Gamenight");
                 }
             }
-
             ViewBag.Boardgames = boardgameList;
             return View(model);
         }
@@ -90,7 +101,7 @@ namespace Portal.Controllers
                     Title = gamenight.Name,
                     Description = gamenight.Description,
                     Date = gamenight.DateTime,
-                    Time = new TimeSpan(gamenight.DateTime.Hour, gamenight.DateTime.Minute,gamenight.DateTime.Second),
+                    Time = new TimeSpan(gamenight.DateTime.Hour, gamenight.DateTime.Minute, gamenight.DateTime.Second),
                     IsPG18 = gamenight.IsPG18,
                     MaxParticipants = gamenight.MaxParticipants,
                     Street = gamenight.Address.Street,
@@ -130,12 +141,50 @@ namespace Portal.Controllers
             var viewModel = new GamenightDetailViewModel
             {
                 Gamenight = gamenight,
-                Review = new ReviewViewModel()
+                Review = new ReviewViewModel
+                {
+                    GamenightId = gamenightId,
+                }
             };
-
+            var hostReviews = await _reviewRepository.GetAllReviewsForHost(await _gamenightRepository.GetHostGamenightIds(gamenight.HostId));
+            ViewBag.ReviewCalculations = _reviewService.CalculateTotalAndAverageScoreForHost(hostReviews);
             return View(viewModel);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Detail(ReviewViewModel reviewModel)
+        {
+                if (ModelState.IsValid)
+            {
+                var userId = await _userRepository.GetUserIdAsync(User.Identity.Name);
+                var review = _reviewService.CreateFromModel(reviewModel, userId, reviewModel.GamenightId, User.Identity.Name);
+
+                var posted = await _reviewRepository.AddReview(review);
+
+                return RedirectToAction("Detail", new { gamenightId = reviewModel.GamenightId });
+            }
+
+            var gamenight = await _gamenightRepository.GetGamenightAsync(reviewModel.GamenightId);
+            var viewModel = new GamenightDetailViewModel
+            {
+                Gamenight = gamenight,
+                Review = reviewModel
+            };
+            var hostReviews = await _reviewRepository.GetAllReviewsForHost(await _gamenightRepository.GetHostGamenightIds(gamenight.HostId));
+            ViewBag.ReviewCalculations = _reviewService.CalculateTotalAndAverageScoreForHost(hostReviews);
+
+            // Manually validate the ReviewViewModel to display the validation errors
+            var validationResults = new List<ValidationResult>();
+            var validationContext = new ValidationContext(viewModel.Review);
+            Validator.TryValidateObject(viewModel.Review, validationContext, validationResults, true);
+
+            foreach (var validationResult in validationResults)
+            {
+                ModelState.AddModelError($"Review.{validationResult.MemberNames.First()}", validationResult.ErrorMessage);
+            }
+            
+            return View(viewModel);
+        }
 
         // Detail page button actions
         [HttpPost]
@@ -146,28 +195,21 @@ namespace Portal.Controllers
             {
                 await _gamenightRepository.RemoveGamenightAsync(gamenightId);
             }
-
-            return RedirectToAction("Hosted","Gamenight");
+            return RedirectToAction("Hosted", "Gamenight");
         }
 
         [HttpPost]
         public async Task<IActionResult> Participate([FromForm] int gamenightId)
         {
             var gamenight = await _gamenightRepository.GetGamenightAsync(gamenightId);
-
             var user = await _userRepository.GetUserAsync(User.Identity.Name);
-
             if (user != null || gamenight != null)
             {
-
-                if (_participatingService.ParticipateAllowed(gamenight,user))
+                if (_participatingService.ParticipateAllowed(gamenight, user))
                 {
-
                     var participating = await _participatingRepository.Participate(_gamenightService.CreateNewParticipatingClass(gamenightId, user.Id));
-
                 }
             }
-
             return RedirectToAction("Detail", gamenightId);
         }
 
@@ -176,9 +218,7 @@ namespace Portal.Controllers
         public async Task<IActionResult> UnParticipate([FromForm] int gamenightId)
         {
             var gamenight = await _gamenightRepository.GetGamenightAsync(gamenightId);
-
             var userId = await _userRepository.GetUserIdAsync(User.Identity.Name);
-
             if (userId != null || gamenight != null)
             {
                 if (_participatingService.UnParticipateAllowed(gamenight, userId))
@@ -186,11 +226,7 @@ namespace Portal.Controllers
                     var unparticipating = await _participatingRepository.UnParticipate(gamenightId, userId);
                 }
             }
-
             return RedirectToAction("Detail", gamenightId);
         }
-
-
-
     }
 }

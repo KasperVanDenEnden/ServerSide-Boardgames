@@ -16,6 +16,8 @@ namespace Domain
         public int Rating { get; set; }
         [Required]
         public string Username { get; set; }
+        [Required]
+        public DateTime Posted { get; set; }
 
 
 

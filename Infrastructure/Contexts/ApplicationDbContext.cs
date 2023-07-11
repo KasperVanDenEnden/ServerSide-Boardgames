@@ -11,16 +11,13 @@ namespace Infrastructure.Contexts
 {
     public class ApplicationDbContext : DbContext
     {
-        // Tables from domain Classes Example
-        public DbSet<User> User { get; set; } = null!;
+        // Tables from domain classes
+        public DbSet<User> Users { get; set; } = null!;
         public DbSet<Gamenight> Gamenights { get; set; } = null!;
-        public DbSet<Boardgame> Boardgame { get; set; } = null!;
-        public DbSet<GamenightBoardgame> GamenightBoardgames { get; set; } 
-        public DbSet<Participating> Participating { get; set; }
-        public DbSet<Review> Review { get; set; }
-
-
-
+        public DbSet<Boardgame> Boardgames { get; set; } = null!;
+        public DbSet<GamenightBoardgame> GamenightBoardgames { get; set; } = null!;
+        public DbSet<Participating> Participatings { get; set; } = null!;
+        public DbSet<Review> Reviews { get; set; } = null!;
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -28,12 +25,11 @@ namespace Infrastructure.Contexts
         {
             base.OnModelCreating(modelBuilder);
 
-
             modelBuilder.Entity<GamenightBoardgame>()
-            .HasKey(gb => new { gb.GamenightId, gb.BoardgameId });
+                .HasKey(gb => new { gb.GamenightId, gb.BoardgameId });
 
             modelBuilder.Entity<Participating>()
-            .HasKey(p => new { p.UserId, p.GamenightId });
+                .HasKey(p => new { p.UserId, p.GamenightId });
 
             modelBuilder.Entity<Participating>()
                 .HasOne(p => p.User)

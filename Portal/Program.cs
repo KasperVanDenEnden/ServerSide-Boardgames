@@ -29,12 +29,14 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IGamenightRepository, GamenightRepository>();
 builder.Services.AddScoped<IBoardgameRepository, BoardgameRepository>();
 builder.Services.AddScoped<IParticipatingRepository, ParticipatingRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
 // Services AddScoped
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IBoardgameService, BoardgameService>();
 builder.Services.AddScoped<IGamenightService, GamenightService>();
 builder.Services.AddScoped<IParticipatingService, ParticipatingService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
 
 // Authenticated
 builder.Services.AddAuthentication("CookieAuth")

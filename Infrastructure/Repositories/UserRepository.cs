@@ -19,7 +19,7 @@ namespace Infrastructure.Repositories
 
         public async Task<bool> AddUserAsync(User newUser)
         {
-            var user = await _context.User.AddAsync(newUser);
+            var user = await _context.Users.AddAsync(newUser);
             await _context.SaveChangesAsync();
 
             if (user != null) { return true ; }
@@ -29,7 +29,7 @@ namespace Infrastructure.Repositories
 
         public async Task<User> GetUserAsync(string username)
         {
-            var user = await _context.User.FirstOrDefaultAsync(u => u.UserName == username);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
 
             if (user != null) { return user; }
             return null;
@@ -37,7 +37,7 @@ namespace Infrastructure.Repositories
 
         public async Task<int> GetUserIdAsync(string username)
         {
-            var user = await _context.User.FirstOrDefaultAsync(u => u.UserName == username);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == username);
 
             if (user != null) { return user.Id; }
             return 0;
