@@ -20,7 +20,7 @@ namespace Domainservices.Services
                 var AgeCheck = this.CheckIfOldEnough(gamenight.IsPG18, userDateOfBirth);
                 var FullCheck = this.CheckIfGamenightIsFull(gamenight.MaxParticipants, gamenight.Participants);
 
-                if(AgeCheck && FullCheck) { return true; }
+                if(AgeCheck && !FullCheck) { return true; }
             }
 
             return false;
@@ -37,8 +37,8 @@ namespace Domainservices.Services
 
         public bool UserIsCurrentlyParticipating(int userId, List<Participating> participants)
         {
-            if (participants.Any(p => p.UserId == userId)) { return false; }
-            return true;
+            if (participants.Any(p => p.UserId == userId)) { return true; }
+            return false;
         }
 
         public bool CheckIfOldEnough(bool IsPG18, DateOnly dateOfBirth)

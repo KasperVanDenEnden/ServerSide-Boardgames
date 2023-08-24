@@ -30,7 +30,7 @@ namespace Infrastructure.Repositories
 
         public async Task<bool> UnParticipate(int gamenightId, int userId)
         {
-            var participating = await _context.Participatings.FindAsync(gamenightId, userId);
+            var participating = await _context.Participatings.FindAsync(userId, gamenightId);
 
             if (participating != null) {
                 _context.Participatings.Remove(participating);

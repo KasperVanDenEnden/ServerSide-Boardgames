@@ -48,5 +48,9 @@ namespace Domain
         // One of the chosen boardgames image
         [Required]
         public byte[] Image { get; set; }
+
+
+        // Foods and Drinks
+        public List<Consumable> Consumables { get; set;}
     }
 }

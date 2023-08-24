@@ -1,22 +1,70 @@
+:root {
+    --prim-orange: #F36603;
+    --prim-blue: #21468B;
+    --prim-red: #AE1C28;
+    --prim-white: #FFFFFF;
+    --prim-black: #000000;
+}
+
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+/* BUTTONS */
+.btn-blue {
+    background-color: var(--prim-blue);
+    color: white;
+    border-radius:10px;
+}
+
+.btn-red {
+    background-color: var(--prim-red);
+    color: white;
+    border-radius: 10px;
+}
+
+.btn-blue:hover, .btn-red:hover {
+    color: var(--prim-white);
+}
+
+/* NAVBAR */
+nav {
+    background-color: var(--prim-orange);
+    color: white;
+}
+
+.nav-link {
+    font:bold 15px large, arial; 
+}
+
+.nav-divider {
+   
+    border-right: 1px solid var(--prim-white);
+  
+}
+
+/* FORMS */
+form {
+    border: 3px solid var(--prim-orange);
+    border-radius: 10px;
+    padding: 20px;
 }

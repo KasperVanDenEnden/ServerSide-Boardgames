@@ -61,7 +61,7 @@ else
     <ul>
         @foreach (var participant in Model.Gamenight.Participants)
         {
-            <li>@participant.User</li>
+            <li>@participant.User.UserName</li>
         }
     </ul>
 

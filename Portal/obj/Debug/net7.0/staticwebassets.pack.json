@@ -5,12 +5,44 @@
       "PackagePath": "staticwebassets\\Portal.bundle.scp.css"
     },
     {
+      "Id": "C:\\SSBG\\Portal\\wwwroot\\css\\footer.css",
+      "PackagePath": "staticwebassets\\css\\footer.css"
+    },
+    {
+      "Id": "C:\\SSBG\\Portal\\wwwroot\\css\\form.css",
+      "PackagePath": "staticwebassets\\css\\form.css"
+    },
+    {
+      "Id": "C:\\SSBG\\Portal\\wwwroot\\css\\header.css",
+      "PackagePath": "staticwebassets\\css\\header.css"
+    },
+    {
       "Id": "C:\\SSBG\\Portal\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
       "Id": "C:\\SSBG\\Portal\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\SSBG\\Portal\\wwwroot\\images\\DutchFlag.svg",
+      "PackagePath": "staticwebassets\\images\\DutchFlag.svg"
+    },
+    {
+      "Id": "C:\\SSBG\\Portal\\wwwroot\\images\\icon.png",
+      "PackagePath": "staticwebassets\\images\\icon.png"
+    },
+    {
+      "Id": "C:\\SSBG\\Portal\\wwwroot\\images\\icon100.png",
+      "PackagePath": "staticwebassets\\images\\icon100.png"
+    },
+    {
+      "Id": "C:\\SSBG\\Portal\\wwwroot\\images\\icon50.png",
+      "PackagePath": "staticwebassets\\images\\icon50.png"
+    },
+    {
+      "Id": "C:\\SSBG\\Portal\\wwwroot\\images\\iconThumb.png",
+      "PackagePath": "staticwebassets\\images\\iconThumb.png"
     },
     {
       "Id": "C:\\SSBG\\Portal\\wwwroot\\js\\site.js",

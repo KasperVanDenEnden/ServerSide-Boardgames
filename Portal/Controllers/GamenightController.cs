@@ -210,7 +210,7 @@ namespace Portal.Controllers
                     var participating = await _participatingRepository.Participate(_gamenightService.CreateNewParticipatingClass(gamenightId, user.Id));
                 }
             }
-            return RedirectToAction("Detail", gamenightId);
+            return RedirectToAction("Detail", new { gamenightId = gamenightId });
         }
 
 
@@ -226,7 +226,7 @@ namespace Portal.Controllers
                     var unparticipating = await _participatingRepository.UnParticipate(gamenightId, userId);
                 }
             }
-            return RedirectToAction("Detail", gamenightId);
+            return RedirectToAction("Detail", new { gamenightId = gamenightId });
         }
     }
 }

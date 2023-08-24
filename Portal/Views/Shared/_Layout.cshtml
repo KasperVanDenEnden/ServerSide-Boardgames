@@ -10,62 +10,72 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Portal</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
 
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
-                            <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Boardgame" asp-action="Boardgames">All Boardgames</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Gamenights
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Gamenight" asp-action="Gamenights">All Gamenights</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Gamenight" asp-action="Hosted">Hosted</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Gamenight" asp-action="Participating">Participating</a>
-                                    </li>
-                                    <!-- Add more dropdown items as needed -->
-                                </ul>
-                            </li>
-                            <li>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Gamenight" asp-action="Organise">Organise</a>
-                            </li>
-                            
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Sign In</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a>
-                            </li>
-                        }
-                    </ul>
+        <div id="TopHeader" class="px-2">
+            <h4><b>Populaire avond:</b> Weerwolven van wakkerdam</h4>
+        </div>
+        <div id="NavHeader">
+            <nav  class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="images/icon100.png" /></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-black" asp-area="" asp-controller="Home" asp-action="Index">HOME</a>
+                                </li>
+                               
+                                <li class="nav-item">
+                                    <a class="nav-link text-black" asp-area="" asp-controller="Gamenight" asp-action="Organise">ORGANISEREN</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-black" asp-area="" asp-controller="Boardgame" asp-action="Boardgames">BORDSPELLEN</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link text-black dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        SPEELAVONDEN
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <li>
+                                            <a class="dropdown-item text-black" asp-area="" asp-controller="Gamenight" asp-action="Gamenights">Alle avonden</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-black" asp-area="" asp-controller="Gamenight" asp-action="Hosted">Eigen avonden</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-black" asp-area="" asp-controller="Gamenight" asp-action="Participating">Deelnemende avonden</a>
+                                        </li>
+                                        <!-- Add more dropdown items as needed -->
+                                    </ul>
+                                </li>
+                                <li class="nav-item nav-divider">
+                                    <a class="nav-link text-black" asp-area="" asp-controller="Home" asp-action="Privacy">PRIVACY</a>
+                                </li>
+                                <li>
+                                    <a class="btn btn-blue mx-2" asp-area="" asp-controller="Account" asp-action="Logout">Sign out</a>
+                                </li>
+
+                            }
+                            else
+                            {
+                                <li >
+                                    <a class="btn btn-blue mx-2" asp-area="" asp-controller="Account" asp-action="Login">Sign In</a>
+                                </li>
+                                <li >
+                                    <a class="btn btn-blue mx-2" asp-area="" asp-controller="Account" asp-action="Register">Sign Up</a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </div>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
