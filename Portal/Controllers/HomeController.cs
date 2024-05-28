@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Portal.Models;
 using System.Diagnostics;
 
@@ -13,8 +14,20 @@ namespace Portal.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                // User is logged in, display logged-in content
+                ViewBag.Message = "Welcome, " + User.Identity.Name + "!";
+            }
+            else
+            {
+                // User is not logged in, display default content
+                ViewBag.Message = "Welcome to the home page!";
+            }
+
             return View();
         }
 

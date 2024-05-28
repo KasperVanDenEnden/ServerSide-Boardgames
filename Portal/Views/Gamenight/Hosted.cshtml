@@ -1,0 +1,31 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@using Domain
+@model List<Gamenight>
+
+@if(Model.Count == 0)
+{
+    <p> You have not yet hosted a gamenight</p>    
+} else
+{
+    <div class="row">
+        @foreach (var night in Model)
+        {
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"> @night.DateTime</h5>
+                        <form method="GET" asp-action="Detail" asp-controller="Gamenight">
+                            <button type="submit" class="btn btn-link">View Details</button>
+                            <input type="hidden" name="gamenightId" value="@night.Id" />
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

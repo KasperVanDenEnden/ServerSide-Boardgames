@@ -16,6 +16,46 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\SSBG\Portal
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/SSBG/Portal/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/SSBG/Portal/Views/Account/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/SSBG/Portal/Views/Boardgame/AddBoardgame.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9hcmRnYW1lXEFkZEJvYXJkZ2FtZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/SSBG/Portal/Views/Boardgame/Boardgames.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9hcmRnYW1lXEJvYXJkZ2FtZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/SSBG/Portal/Views/Gamenight/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR2FtZW5pZ2h0XERldGFpbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/SSBG/Portal/Views/Gamenight/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR2FtZW5pZ2h0XEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/SSBG/Portal/Views/Gamenight/Gamenights.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR2FtZW5pZ2h0XEdhbWVuaWdodHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/SSBG/Portal/Views/Gamenight/Hosted.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR2FtZW5pZ2h0XEhvc3RlZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/SSBG/Portal/Views/Gamenight/Organise.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR2FtZW5pZ2h0XE9yZ2FuaXNlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/SSBG/Portal/Views/Gamenight/Participating.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcR2FtZW5pZ2h0XFBhcnRpY2lwYXRpbmcuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/SSBG/Portal/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
